@@ -1,7 +1,7 @@
 #ifndef I2C_H
-
+#define I2C_H
 /*
-#if defined(Arduino) //Arduino symbol is set automaticly by Arduino IDE
+#if defined(ARDUINO) //Arduino symbol is set automaticly by Arduino IDE
 // this will called olny if Arduino IDE is used 
 #include "arduinoI2C.h"
 using I2C = ArduinoI2C;
@@ -10,10 +10,19 @@ using I2C = ArduinoI2C;
 //This section is called when STM32CubeIDE is used
 #include "stm32I2C.h"
 using I2C = STM32I2C;
+
+#else
+
+#error "Unsupported platform"
+
 #endif
 */
 
 #include "arduinoI2C.h"
 using I2C = ArduinoI2C;
+
+I2C& getPrimaryI2C();
+
+I2C& getSecondaryI2C();
 
 #endif

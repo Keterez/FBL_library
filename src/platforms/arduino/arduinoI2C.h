@@ -1,13 +1,15 @@
-#ifndef arduinoI2C_H
-#define arduinoI2C_H
+#ifndef ARDUINO_I2C_H
+#define ARDUINO_I2C_H
 
 #include <Wire.h>
+#include <stdint.h>
 
 class ArduinoI2C
 {
 public:
     ArduinoI2C(TwoWire &wire);
-    bool begin(void);
+    void begin(void);
+    bool isConnected(uint8_t deviceAddress);
     bool readRegister(uint8_t deviceAddress,
                       uint8_t registerAddress,
                       uint8_t *data,
@@ -19,6 +21,6 @@ public:
 
 private:
     TwoWire &_wire;
-}
+};
 
 #endif

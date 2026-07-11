@@ -2,9 +2,15 @@
 
 ArduinoI2C::ArduinoI2C(TwoWire &wire) : _wire(wire) {}
 
-bool ArduinoI2C::begin(void)
+void ArduinoI2C::begin(void)
 {
     _wire.begin(); // Begin wire communiciation
+}
+
+bool ArduinoI2C::isConnected(uint8_t deviceAddress){
+    _wire.beginTransmission(deviceAddress);
+
+    return _wire.endTrasmission() == 0;
 }
 
 bool ArduinoI2C::readRegister(
@@ -45,10 +51,21 @@ bool ArduinoI2C::readRegister(
     return true;
 }
 
-bool ArduinoI2C::registerWrite(
+bool ArduinoI2C::writeRegister(
     uint8_t deviceAddress,
     uint8_t registerAddress,
     uint8_t value)
 {
-    
+    _wire.beginTransmission(deviceAddress);
+    // Start communication with the I2C device at the specified address.
+
+    _wire.write(registerAddress);
+    // Send the address of the register where the value should be written.
+
+    _wire.write(value);
+    // Add the value that should be written into the selected register.
+
+    return _wire.endTransmission() == 0;
+    // Send the complete transmission.
+    // Return true if the device acknowledged the transmission, otherwise false.
 }
