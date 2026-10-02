@@ -25,6 +25,21 @@ public:
     {
         analogWrite(pin, value);
     }
+
+    static void pinMode(uint32_t pin, uint32_t mode)
+    {
+        ::pinMode(pin, mode);
+    }
+
+    static void digitalWrite(uint32_t pin, uint32_t value)
+    {
+        ::digitalWrite(pin, value);
+    }
+
+    static uint32_t analogReadPin(uint32_t pin)
+    {
+        return ::analogRead(pin);
+    }
 };
 
 #endif

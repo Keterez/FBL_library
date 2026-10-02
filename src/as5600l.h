@@ -1,8 +1,8 @@
 #ifndef AS5600L_H
 #define AS5600L_H
 
-#include "I2C.h"
-#include "constatns.h"
+#include "platforms/I2C.h"
+#include "constants.h"
 #include <stdint.h>
 
 enum class MagnetStatus : uint8_t
@@ -12,7 +12,7 @@ enum class MagnetStatus : uint8_t
     Good,
     TooStrong,
     CommunicationError
-}
+};
 
 class AS5600L
 {
@@ -31,6 +31,8 @@ public:
 
 
 private:
+    bool read12BitRegister(uint8_t registerAddress, uint16_t &value);
+
     I2C &_i2c;
     uint8_t _deviceAddress;
 };

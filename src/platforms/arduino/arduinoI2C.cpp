@@ -10,7 +10,7 @@ void ArduinoI2C::begin(void)
 bool ArduinoI2C::isConnected(uint8_t deviceAddress){
     _wire.beginTransmission(deviceAddress);
 
-    return _wire.endTrasmission() == 0;
+    return _wire.endTransmission() == 0;
 }
 
 bool ArduinoI2C::readRegister(
