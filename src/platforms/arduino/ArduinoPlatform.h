@@ -21,6 +21,11 @@ public:
         pinMode(pin, OUTPUT);
     }
 
+    static void pinModeInputPullup(uint32_t pin)
+    {
+        ::pinMode(pin, INPUT_PULLUP);
+    }
+
     static void analogWritePin(uint32_t pin, uint32_t value)
     {
         analogWrite(pin, value);
@@ -39,6 +44,10 @@ public:
     static uint32_t analogReadPin(uint32_t pin)
     {
         return ::analogRead(pin);
+    }
+    static bool digitalReadPin(uint32_t pin)
+    {
+        return ::digitalRead(pin) == HIGH;
     }
 };
 

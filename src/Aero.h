@@ -5,6 +5,13 @@
 #include <stdint.h>
 
 constexpr uint32_t AERO_MOTOR_PIN = 5;
+constexpr uint32_t START = 7;
+constexpr uint32_t USER = 8;
+
+constexpr uint32_t BIT1 = 10;
+constexpr uint32_t BIT2 = 11;
+constexpr uint32_t BIT3 = 12;
+
 
 class AeroClass
 {

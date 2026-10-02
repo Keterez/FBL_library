@@ -1,5 +1,12 @@
 #include "Aero.h"
 
-void setup(){}
+bool switch = true;  //0 test for sensor
+                     //1 test for motor
 
-void loop(){}
+
+void setup() {}
+Aero.begin();
+Aero.calibrate();
+
+
+void loop() {}

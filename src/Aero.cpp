@@ -7,6 +7,21 @@ AeroClass::AeroClass() : _i2c(getPrimaryI2C()), _as(_i2c)
 
 void AeroClass::begin()
 {
+    Platform::pinModeInputPullup(START);
+    Platform::pinModeInputPullup(USER);
+    Platform::pinModeInputPullup(BIT1);
+    Platform::pinModeInputPullup(BIT2);
+    Platform::pinModeInputPullup(BIT3);
+    
+    bool bit1 = Platform::digitalReadPin(BIT1);
+    bool bit2 = Platform::digitalReadPin(BIT2);
+    bool bit3 = Platform::digitalReadPin(BIT3);
+
+    if (bit1 && bit2 && bit3)
+    {
+        Platform::println("Aero is release R1.");
+    }
+    
     // Check whether the AS5600 sensor is connected.
     while (!_as.begin())
     {
@@ -65,6 +80,18 @@ bool AeroClass::calibrate(void)
         Platform::analogWritePin(AERO_MOTOR_PIN, 0); // Actuator powered off
         Platform::delayMs(200);          // wait
     }
+
+    Platform::println("Calibration successful.");
+    Platform::delayMs(500); // wait for the last beep to finish
+
+    Platform::println("Press the START button to continue.");
+    while (true){
+        if (Platform::digitalReadPin(START))
+        {
+            break;
+        }
+    }
+
     return true;
 }
 
