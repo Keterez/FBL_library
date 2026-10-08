@@ -26,6 +26,11 @@ public:
         ::pinMode(pin, INPUT_PULLUP);
     }
 
+    static void pinModeInput(uint32_t pin)
+    {
+        ::pinMode(pin, INPUT);
+    }
+
     static void analogWritePin(uint32_t pin, uint32_t value)
     {
         analogWrite(pin, value);

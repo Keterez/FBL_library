@@ -9,19 +9,40 @@ void AeroClass::begin()
 {
     Platform::pinModeInputPullup(START);
     Platform::pinModeInputPullup(USER);
+
     Platform::pinModeInputPullup(BIT1);
     Platform::pinModeInputPullup(BIT2);
     Platform::pinModeInputPullup(BIT3);
-    
+
+    Platform::pinModeOutput(GREEN_LED);
+    Platform::pinModeOutput(RED_LED);
+    Platform::pinModeOutput(BLUE_LED);
+
+    Platform::pinModeOutput(AERO_MOTOR_PIN);
+    Platform::pinModeInput(POT1);
+
     bool bit1 = Platform::digitalReadPin(BIT1);
     bool bit2 = Platform::digitalReadPin(BIT2);
     bool bit3 = Platform::digitalReadPin(BIT3);
 
-    if (bit1 && bit2 && bit3)
+    if (bit1 && !bit2 && !bit3)
     {
-        Platform::println("Aero is release R1.");
+        if (AeroRelease == 1)
+        {
+            Platform::println("Aero is release R1.");
+            turnOnGreen();
+        }
     }
-    
+    else
+    {
+        turnOnRed();
+        while (true)
+        {
+            Platform::println("Aero is not release R1! Please set correct release version in Aero.h.");
+            Platform::delayMs(500);
+        }
+    }
+
     // Check whether the AS5600 sensor is connected.
     while (!_as.begin())
     {
@@ -55,12 +76,12 @@ void AeroClass::begin()
         case MagnetStatus::Good:
             break;
         }
-
+        turnOnRed();
         Platform::delayMs(500);
     }
+    turnOnBlue();
     Platform::println("AS5600 initialized successfully.");
-
-    Platform::pinModeOutput(AERO_MOTOR_PIN);
+    Platform::delayMs(500);
 }
 
 bool AeroClass::calibrate(void)
@@ -74,24 +95,26 @@ bool AeroClass::calibrate(void)
     }
 
     for (int i = 0; i < 3; i++)
-    {                                    // Simple sound indication of successful calibration 3 beeps
+    {                                                // Simple sound indication of successful calibration 3 beeps
         Platform::analogWritePin(AERO_MOTOR_PIN, 1); // Actuator powered just enough to beep without turning the rotor
-        Platform::delayMs(200);          // wait
+        Platform::delayMs(200);                      // wait
         Platform::analogWritePin(AERO_MOTOR_PIN, 0); // Actuator powered off
-        Platform::delayMs(200);          // wait
+        Platform::delayMs(200);                      // wait
     }
 
     Platform::println("Calibration successful.");
     Platform::delayMs(500); // wait for the last beep to finish
 
     Platform::println("Press the START button to continue.");
-    while (true){
-        if (Platform::digitalReadPin(START))
+    while (true)
+    {
+        if (!Platform::digitalReadPin(START))
         {
             break;
         }
     }
 
+    turnOnGreen();
     return true;
 }
 
@@ -118,4 +141,24 @@ void AeroClass::writeInput(float u)
     Platform::analogWritePin(AERO_MOTOR_PIN, pwmValue);
 }
 
+void AeroClass::turnOnGreen()
+{
+    Platform::digitalWrite(GREEN_LED, HIGH);
+    Platform::digitalWrite(RED_LED, LOW);
+    Platform::digitalWrite(BLUE_LED, LOW);
+}
+
+void AeroClass::turnOnRed()
+{
+    Platform::digitalWrite(GREEN_LED, LOW);
+    Platform::digitalWrite(RED_LED, HIGH);
+    Platform::digitalWrite(BLUE_LED, LOW);
+}
+
+void AeroClass::turnOnBlue()
+{
+    Platform::digitalWrite(GREEN_LED, LOW);
+    Platform::digitalWrite(RED_LED, LOW);
+    Platform::digitalWrite(BLUE_LED, HIGH);
+}
 AeroClass Aero;
