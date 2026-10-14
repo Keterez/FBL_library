@@ -37,6 +37,7 @@ private:
     void turnOnGreen();
     void turnOnRed();
     void turnOnBlue();
+    void turnOffLed();
 
 
     static constexpr float _min_voltage = 0.0f;

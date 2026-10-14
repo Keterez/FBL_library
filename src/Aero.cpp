@@ -36,6 +36,7 @@ void AeroClass::begin()
     else
     {
         turnOnRed();
+
         while (true)
         {
             Platform::println("Aero is not release R1! Please set correct release version in Aero.h.");
@@ -47,7 +48,10 @@ void AeroClass::begin()
     while (!_as.begin())
     {
         Platform::println("Potentiometer is not connected.");
-        Platform::delayMs(500);
+        turnOnRed();
+        Platform::delayMs(125);
+        turnOffLed();
+        Platform::delayMs(125);
     }
 
     // Check whether the magnet is correctly detected.
@@ -77,10 +81,12 @@ void AeroClass::begin()
             break;
         }
         turnOnRed();
-        Platform::delayMs(500);
+        Platform::delayMs(250);
+        turnOffLed();
+        Platform::delayMs(250);
     }
     turnOnBlue();
-    Platform::println("AS5600 initialized successfully.");
+    Platform::println("Aero device initialized successfully.");
     Platform::delayMs(500);
 }
 
@@ -95,19 +101,35 @@ bool AeroClass::calibrate(void)
     }
 
     for (int i = 0; i < 3; i++)
-    {                                                // Simple sound indication of successful calibration 3 beeps
+    {
+        // Simple sound indication of successful calibration 3 beeps, Led is also switching
         Platform::analogWritePin(AERO_MOTOR_PIN, 1); // Actuator powered just enough to beep without turning the rotor
+        if (i == 0)
+            turnOnGreen();
+        else if (i == 1)
+            turnOnGreen();
+        else if (i == 2)
+            turnOnRed();
         Platform::delayMs(200);                      // wait
+        
         Platform::analogWritePin(AERO_MOTOR_PIN, 0); // Actuator powered off
-        Platform::delayMs(200);                      // wait
+        turnOffLed();
+        Platform::delayMs(200); // wait
     }
 
     Platform::println("Calibration successful.");
     Platform::delayMs(500); // wait for the last beep to finish
 
     Platform::println("Press the START button to continue.");
+    Platform::delayMs(250);
+
     while (true)
     {
+        turnOnGreen();
+        Platform::delayMs(125);
+        turnOffLed();
+        Platform::delayMs(125);
+
         if (!Platform::digitalReadPin(START))
         {
             break;
@@ -160,5 +182,11 @@ void AeroClass::turnOnBlue()
     Platform::digitalWrite(GREEN_LED, LOW);
     Platform::digitalWrite(RED_LED, LOW);
     Platform::digitalWrite(BLUE_LED, HIGH);
+}
+void AeroClass::turnOffLed()
+{
+    Platform::digitalWrite(GREEN_LED, LOW);
+    Platform::digitalWrite(RED_LED, LOW);
+    Platform::digitalWrite(BLUE_LED, LOW);
 }
 AeroClass Aero;
