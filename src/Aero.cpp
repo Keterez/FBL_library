@@ -123,17 +123,13 @@ bool AeroClass::calibrate(void)
     Platform::println("Press the START button to continue.");
     Platform::delayMs(250);
 
-    while (true)
+    while (Platform::digitalReadPin(START))
     {
         turnOnGreen();
         Platform::delayMs(125);
         turnOffLed();
         Platform::delayMs(125);
 
-        if (!Platform::digitalReadPin(START))
-        {
-            break;
-        }
     }
 
     turnOnGreen();
@@ -165,28 +161,28 @@ void AeroClass::writeInput(float u)
 
 void AeroClass::turnOnGreen()
 {
-    Platform::digitalWrite(GREEN_LED, HIGH);
-    Platform::digitalWrite(RED_LED, LOW);
-    Platform::digitalWrite(BLUE_LED, LOW);
+    Platform::digitalWrite(GREEN_LED, LOW);
+    Platform::digitalWrite(RED_LED, HIGH);
+    Platform::digitalWrite(BLUE_LED, HIGH);
 }
 
 void AeroClass::turnOnRed()
 {
-    Platform::digitalWrite(GREEN_LED, LOW);
-    Platform::digitalWrite(RED_LED, HIGH);
-    Platform::digitalWrite(BLUE_LED, LOW);
+    Platform::digitalWrite(GREEN_LED, HIGH);
+    Platform::digitalWrite(RED_LED, LOW);
+    Platform::digitalWrite(BLUE_LED, HIGH);
 }
 
 void AeroClass::turnOnBlue()
 {
-    Platform::digitalWrite(GREEN_LED, LOW);
-    Platform::digitalWrite(RED_LED, LOW);
-    Platform::digitalWrite(BLUE_LED, HIGH);
+    Platform::digitalWrite(GREEN_LED, HIGH);
+    Platform::digitalWrite(RED_LED, HIGH);
+    Platform::digitalWrite(BLUE_LED, LOW);
 }
 void AeroClass::turnOffLed()
 {
-    Platform::digitalWrite(GREEN_LED, LOW);
-    Platform::digitalWrite(RED_LED, LOW);
-    Platform::digitalWrite(BLUE_LED, LOW);
+    Platform::digitalWrite(GREEN_LED, HIGH);
+    Platform::digitalWrite(RED_LED, HIGH);
+    Platform::digitalWrite(BLUE_LED, HIGH);
 }
 AeroClass Aero;
