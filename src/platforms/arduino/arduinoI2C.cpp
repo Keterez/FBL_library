@@ -1,6 +1,6 @@
 #include "arduinoI2C.h"
 
-ArduinoI2C::ArduinoI2C(TwoWire &wire) : _wire(wire) {}
+ArduinoI2C::ArduinoI2C(ArduinoWire &wire) : _wire(wire) {}
 
 void ArduinoI2C::begin(void)
 {

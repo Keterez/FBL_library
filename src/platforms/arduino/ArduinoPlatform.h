@@ -38,12 +38,12 @@ public:
 
     static void pinMode(uint32_t pin, uint32_t mode)
     {
-        ::pinMode(pin, mode);
+        ::pinMode(pin, static_cast<decltype(INPUT)>(mode));
     }
 
     static void digitalWrite(uint32_t pin, uint32_t value)
     {
-        ::digitalWrite(pin, value);
+        ::digitalWrite(pin, value ? HIGH : LOW);
     }
 
     static uint32_t analogReadPin(uint32_t pin)

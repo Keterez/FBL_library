@@ -21,6 +21,14 @@ constexpr uint32_t GREEN_LED = 13;
 constexpr uint32_t RED_LED = 12;
 constexpr uint32_t BLUE_LED = 11;
 
+enum class AeroStatus : uint8_t
+{
+    Ready,       // Blue: initialized or experiment finished.
+    Running,     // Green: experiment running.
+    Error,       // Red: experiment stopped by an error.
+    Off
+};
+
 class AeroClass
 {
 public:
@@ -30,6 +38,7 @@ public:
     bool calibrate(void);
     float readSensor();
     void writeInput(float u);
+    void setStatus(AeroStatus status);
 
 private:
     I2C & _i2c;

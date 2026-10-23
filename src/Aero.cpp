@@ -19,6 +19,8 @@ void AeroClass::begin()
     Platform::pinModeOutput(BLUE_LED);
 
     Platform::pinModeOutput(AERO_MOTOR_PIN);
+    writeInput(0.0f);
+    turnOffLed();
     Platform::pinModeInput(POT1);
 
     bool bit1 = Platform::digitalReadPin(BIT1);
@@ -92,11 +94,14 @@ void AeroClass::begin()
 
 bool AeroClass::calibrate(void)
 {
+    writeInput(0.0f);
+    turnOnBlue();
     bool success = _as.calibrate();
 
     if (!success)
     {
         Platform::println("Calibration failed.");
+        turnOnRed();
         return false;
     }
 
@@ -132,7 +137,7 @@ bool AeroClass::calibrate(void)
 
     }
 
-    turnOnGreen();
+    turnOnBlue();
     return true;
 }
 
@@ -143,7 +148,7 @@ float AeroClass::readSensor(void)
 
 void AeroClass::writeInput(float u)
 {
-    if (u < _min_voltage)
+    if (!(u >= _min_voltage)) // Also reject NaN before conversion to PWM.
     {
         u = _min_voltage;
     }
@@ -157,6 +162,17 @@ void AeroClass::writeInput(float u)
         ((u - _min_voltage) / (_max_voltage - _min_voltage)) * pwmMaximum + 0.5f);
 
     Platform::analogWritePin(AERO_MOTOR_PIN, pwmValue);
+}
+
+void AeroClass::setStatus(AeroStatus status)
+{
+    switch (status)
+    {
+    case AeroStatus::Ready: turnOnBlue(); break;
+    case AeroStatus::Running: turnOnGreen(); break;
+    case AeroStatus::Error: turnOnRed(); break;
+    case AeroStatus::Off: turnOffLed(); break;
+    }
 }
 
 void AeroClass::turnOnGreen()
